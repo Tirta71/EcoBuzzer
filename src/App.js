@@ -1,24 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Home from "./Pages/Home";
+import DetailProduk from "./Pages/DetailProduk";
+import DetailCategory from "./Pages/DetailCategory";
+import Login from "./Pages/Login&Register/Login";
+import Register from "./Pages/Login&Register/Register";
 
 function App() {
+  // Check if the user is logged in
+  const isUserLoggedIn = localStorage.getItem("UserID") !== null;
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={isUserLoggedIn ? <Home /> : <Navigate to="/login" />}
+        />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="/detail-category/detail-produk/:ProductID"
+          element={isUserLoggedIn ? <DetailProduk /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/detail-category/:KategoriID"
+          element={
+            isUserLoggedIn ? <DetailCategory /> : <Navigate to="/login" />
+          }
+        />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </Router>
   );
 }
 

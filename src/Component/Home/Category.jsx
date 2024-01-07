@@ -1,14 +1,16 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swiper from "swiper";
 import staticIcons from "../../Data/StaticIcon";
 import staticImages from "../../Data/StaticImage";
+import { KATEGORI_API } from "../../Api/ApiKategori";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/kategoris")
+    fetch(KATEGORI_API)
       .then((response) => response.json())
       .then((data) => {
         setCategories(data.data);

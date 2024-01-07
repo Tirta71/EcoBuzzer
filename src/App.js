@@ -10,6 +10,8 @@ import DetailProduk from "./Pages/DetailProduk";
 import DetailCategory from "./Pages/DetailCategory";
 import Login from "./Pages/Login&Register/Login";
 import Register from "./Pages/Login&Register/Register";
+import ProfileDetail from "./Pages/Profile Detail/ProfileDetail";
+import TambahProduk from "./Pages/Produk/TambahProduk";
 
 function App() {
   // Check if the user is logged in
@@ -23,6 +25,8 @@ function App() {
           element={isUserLoggedIn ? <Home /> : <Navigate to="/login" />}
         />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile-detail" element={<ProfileDetail />} />
+        <Route path="/tambah-produk" element={<TambahProduk />} />
         <Route
           path="/detail-category/detail-produk/:ProductID"
           element={isUserLoggedIn ? <DetailProduk /> : <Navigate to="/login" />}

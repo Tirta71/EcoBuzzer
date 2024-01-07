@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { KATEGORI_API } from "../../Api/ApiKategori";
 
 export default function HeaderDetailCategory() {
   const [kategori, setKategori] = useState({});
@@ -8,9 +9,7 @@ export default function HeaderDetailCategory() {
   useEffect(() => {
     const fetchKategori = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/api/kategoris/${KategoriID}`
-        );
+        const response = await fetch(`${KATEGORI_API}/${KategoriID}`);
         const data = await response.json();
         setKategori(data.data);
       } catch (error) {

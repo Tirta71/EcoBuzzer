@@ -10,7 +10,7 @@ export default function ProfileAcount() {
           <i className="fa-regular fa-user"></i>
         </a>
       </div>
-      <a href="#0" className="acc__cont">
+      <a href="/profile-detail" className="acc__cont">
         <span>{userName}</span>
       </a>
     </div>

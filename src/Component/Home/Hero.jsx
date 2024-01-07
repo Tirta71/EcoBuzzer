@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
+import { PRODUK_API } from "../../Api/ApiProduk";
 export default function Hero() {
   const [harga, setHarga] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/produk")
+      .get(PRODUK_API)
       .then((response) => {
         const prices = response.data.data.map((product) => product.Harga);
         setHarga(prices);

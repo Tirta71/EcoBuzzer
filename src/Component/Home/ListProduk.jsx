@@ -1,17 +1,18 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
-
+import { PRODUK_API } from "../../Api/ApiProduk";
+import { PHOTO_API } from "../../Api/ApiPhoto";
 const ListProduk = () => {
   const [products, setProducts] = useState([]);
   const [photos, setPhotos] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/produk/")
+    fetch(PRODUK_API)
       .then((response) => response.json())
       .then((data) => setProducts(data.data))
       .catch((error) => console.error("Error fetching products:", error));
 
-    fetch("http://localhost:8000/api/photo")
+    fetch(PHOTO_API)
       .then((response) => response.json())
       .then((data) => setPhotos(data.data))
       .catch((error) => console.error("Error fetching photos:", error));
@@ -87,7 +88,7 @@ const ListProduk = () => {
                               width: "280px",
                               height: "220px",
                               borderRadius: "10px",
-                              objectFit: "center",
+                              objectFit: "cover",
                             }}
                           />
                           <img
@@ -97,7 +98,7 @@ const ListProduk = () => {
                               width: "280px",
                               height: "220px",
                               borderRadius: "10px",
-                              objectFit: "center",
+                              objectFit: "cover",
                             }}
                             alt="back image"
                           />

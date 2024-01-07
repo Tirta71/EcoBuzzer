@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { PRODUK_CATEGORI } from "../../Api/ApiProdukBYkategori";
+import { PHOTO_API } from "../../Api/ApiPhoto";
 
 const ContentDetailCategory = () => {
   const [products, setProducts] = useState([]);
@@ -10,9 +12,7 @@ const ContentDetailCategory = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:8000/api/produk-by-category/${KategoriID}`
-        );
+        const response = await fetch(`${PRODUK_CATEGORI}/${KategoriID}`);
         const data = await response.json();
         setProducts(data.data);
       } catch (error) {
@@ -22,7 +22,7 @@ const ContentDetailCategory = () => {
 
     const fetchPhotos = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/photo");
+        const response = await fetch(PHOTO_API);
         const data = await response.json();
         setPhotos(data.data);
       } catch (error) {

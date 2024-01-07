@@ -1,8 +1,12 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import Gambar1 from "../../assets/images/shop/01.jpg";
 import DeskripsiProduk from "./DeskripsiProduk";
 import CategoryProduk from "./CategoryProduk";
 import { useParams } from "react-router-dom";
+import { PRODUK_API } from "../../Api/ApiProduk";
+import { PHOTO_API } from "../../Api/ApiPhoto";
+
 export default function ChildDetailProduk() {
   const { ProductID } = useParams();
   const [product, setProduct] = useState(null);
@@ -10,7 +14,7 @@ export default function ChildDetailProduk() {
 
   useEffect(() => {
     // Fetch product details based on ProductID
-    fetch(`http://localhost:8000/api/produk/${ProductID}`)
+    fetch(`${PRODUK_API}/${ProductID}`)
       .then((response) => response.json())
       .then((data) => setProduct(data.data))
       .catch((error) =>
@@ -18,7 +22,7 @@ export default function ChildDetailProduk() {
       );
 
     // Fetch photos based on ProductID
-    fetch(`http://localhost:8000/api/photo/`)
+    fetch(PHOTO_API)
       .then((response) => response.json())
       .then((data) => setPhotos(data.data))
       .catch((error) => console.error("Error fetching photos:", error));

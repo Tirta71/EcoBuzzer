@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { KATEGORI_API, LOKASI_API } from "../../../../Api/ApiKategori";
+import { CREATE_PRODUK } from "../../../../Api/ApiProduk";
+import Swal from "sweetalert2";
 
 const ChildTambahProduk = () => {
   const [productName, setProductName] = useState("");
@@ -11,12 +14,13 @@ const ChildTambahProduk = () => {
   const [kondisi, setKondisi] = useState("");
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [uniqueProvinces, setUniqueProvinces] = useState([]);
 
   const UserId = localStorage.getItem("UserID");
 
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/kategoris")
+      .get(KATEGORI_API)
       .then((response) => {
         console.log("Categories:", response.data.data);
         setCategories(response.data.data);
@@ -24,9 +28,16 @@ const ChildTambahProduk = () => {
       .catch((error) => console.error("Error fetching categories:", error));
 
     axios
-      .get("http://localhost:8000/api/lokasi")
+      .get(LOKASI_API)
       .then((response) => {
         console.log("Locations:", response.data.data);
+
+        // Filter unique provinces
+        const uniqueProvincesSet = new Set(
+          response.data.data.map((loc) => loc.Provinsi)
+        );
+        setUniqueProvinces([...uniqueProvincesSet]);
+
         setLocations(response.data.data);
       })
       .catch((error) => console.error("Error fetching locations:", error));
@@ -36,7 +47,7 @@ const ChildTambahProduk = () => {
     e.preventDefault();
 
     const selectedLocation = locations.find(
-      (loc) => loc.Kota === location.Kota
+      (loc) => loc.Kota === location.Kota && loc.Provinsi === location.Provinsi
     );
 
     if (!selectedLocation) {
@@ -51,20 +62,32 @@ const ChildTambahProduk = () => {
       Harga: parseInt(price),
       Status: status,
       UserID: UserId,
-      LokasiID: selectedLocation.LokasiID, // Ambil LokasiID dari objek Lokasi yang ditemukan
+      LokasiID: selectedLocation.LokasiID,
       TanggalDiposting: new Date().toISOString().split("T")[0],
       Kondisi: kondisi,
     };
-    console.log(selectedLocation);
 
     axios
-      .post("http://localhost:8000/api/produk-create", data)
+      .post(CREATE_PRODUK, data)
       .then((response) => {
-        console.log(response.data.message);
-        console.log(response.data.data);
+        const newProductID = response.data.data.ProductID; // Perhatikan perubahan di sini
+        localStorage.setItem("NewProductID", String(newProductID));
+
+        console.log("API Response:", response.data);
+        Swal.fire({
+          title: "Success!",
+          text: "Produk berhasil ditambahkan.",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.href = "/tambah-photoProduk";
+        });
       })
       .catch((error) => {
+        let errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
+
         if (error.response) {
+          errorMessage = error.response.data.message || errorMessage;
           console.error(
             "Server responded with non-2xx status:",
             error.response.data
@@ -73,8 +96,15 @@ const ChildTambahProduk = () => {
         } else if (error.request) {
           console.error("No response received from server");
         } else {
+          errorMessage = error.message || errorMessage;
           console.error("Error setting up the request:", error.message);
         }
+        Swal.fire({
+          title: "Error!",
+          text: errorMessage,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       });
   };
 
@@ -144,26 +174,9 @@ const ChildTambahProduk = () => {
             onChange={(e) => setStatus(e.target.value)}
             required
           >
+            <option value="">Pilih Status</option>
             <option value="Available">Available</option>
             <option value="Sold">Sold</option>
-          </select>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="location">Lokasi:</label>
-          <select
-            className="form-control w-100"
-            id="location"
-            value={location.Kota}
-            onChange={(e) => setLocation({ ...location, Kota: e.target.value })}
-            required
-          >
-            <option value="">Pilih Kota</option>
-            {locations.map((location) => (
-              <option key={location.id} value={location.Kota}>
-                {location.Kota}
-              </option>
-            ))}
           </select>
         </div>
 
@@ -178,11 +191,37 @@ const ChildTambahProduk = () => {
             required
           >
             <option value="">Pilih Provinsi</option>
-            {locations.map((location) => (
-              <option key={location.id} value={location.Provinsi}>
-                {location.Provinsi}
+            {uniqueProvinces.map((province) => (
+              <option key={province} value={province}>
+                {province}
               </option>
             ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="location">Kota:</label>
+          <select
+            className="form-control w-100"
+            id="location"
+            value={location.Kota}
+            onChange={(e) => setLocation({ ...location, Kota: e.target.value })}
+            required
+          >
+            <option value="">Pilih Kota</option>
+            {locations
+              .filter((loc) => loc.Provinsi === location.Provinsi)
+              .reduce((uniqueCities, location) => {
+                if (!uniqueCities.includes(location.Kota)) {
+                  uniqueCities.push(location.Kota);
+                }
+                return uniqueCities;
+              }, [])
+              .map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -195,13 +234,17 @@ const ChildTambahProduk = () => {
             onChange={(e) => setKondisi(e.target.value)}
             required
           >
+            <option value="">Pilih kondisi</option>
             <option value="Baik">Baik</option>
             <option value="Rusak">Rusak</option>
             <option value="Sebagian Rusak">Sebagian Rusak</option>
           </select>
         </div>
 
-        <button type="submit" className="btn btn-primary mb-5 mt-2">
+        <button
+          type="submit"
+          className="btn btn-outline-dark mb-5 mt-5 primary-color w-100"
+        >
           Tambah Produk
         </button>
       </form>

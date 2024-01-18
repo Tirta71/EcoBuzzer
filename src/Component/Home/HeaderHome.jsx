@@ -3,6 +3,7 @@ import React from "react";
 import LogoImage from "../../assets/images/logo/logo.svg";
 import Swal from "sweetalert2";
 import ProfileAcount from "./ChildHeaderHome/ProfileAcount";
+import SearchProduk from "./SearchProduk";
 
 export default function HeaderHome() {
   const logout = () => {
@@ -30,12 +31,7 @@ export default function HeaderHome() {
           <a href="/" className="main__logo">
             <img src={LogoImage} alt="logo__image" />
           </a>
-          <div className="search__wrp">
-            <input placeholder="Search for" aria-label="Search" />
-            <button>
-              <i className="fa-solid fa-search"></i>
-            </button>
-          </div>
+          <SearchProduk />
           <div className="account__wrap">
             <ProfileAcount />
 

@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
 import Pagination from "./Pagination";
+import DeleteProduk from "./Produk/DeleteProduk";
 
-const PRODUK_API = "http://localhost:8000/api/produk";
+const PRODUK_API = "http://localhost:8000/api/produk-by-user";
 const PHOTO_API = "http://localhost:8000/api/photo";
 
 export default function PostProduk() {
@@ -15,10 +16,15 @@ export default function PostProduk() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const produkResponse = await fetch(PRODUK_API);
+        // Ambil UserID dari localStorage
+        const userId = localStorage.getItem("UserID");
+
+        // Fetch produk berdasarkan UserID
+        const produkResponse = await fetch(`${PRODUK_API}/${userId}`);
         const produkData = await produkResponse.json();
         setProducts(produkData.data);
 
+        // Fetch foto produk
         const photoResponse = await fetch(PHOTO_API);
         const photoData = await photoResponse.json();
         setPhotos(photoData.data);
@@ -51,8 +57,8 @@ export default function PostProduk() {
     <div className="col-lg-8">
       {loading ? (
         <p>Loading...</p>
-      ) : !products ? (
-        <p>Tidak Ada Produk</p>
+      ) : !products.length ? (
+        <p>Belum Ada Produk Yang Ditambahkan</p>
       ) : (
         currentProducts.map((product) => (
           <div className="item bor mb-20" key={product.ProductID}>
@@ -70,7 +76,9 @@ export default function PostProduk() {
               <div className="info">
                 <span>
                   Nama Produk :{" "}
-                  <a href={`#0/${product.ProductID}`}>{product.NamaProduk}</a>
+                  <a href={`eidt-produk/${product.ProductID}`}>
+                    {product.NamaProduk}
+                  </a>
                 </span>
                 <span className="info_dot"></span>
                 <span>
@@ -79,10 +87,7 @@ export default function PostProduk() {
                   )}
                 </span>
               </div>
-              <div className="image-tag">
-                <a href={`#0/${product.ProductID}`}>Edit</a>
-                <a href={`#0/${product.ProductID}`}>{product.Status}</a>
-              </div>
+              <DeleteProduk product={product} />
             </div>
           </div>
         ))
@@ -90,7 +95,7 @@ export default function PostProduk() {
       <div className="btn-tambahProduk mt-3 position-relative">
         <a
           href="/tambah-produk"
-          className="btn btn-outline-dark position-absolute end-0 primary-color"
+          className="btn btn-outline-dark position-absolute end-0 primary-color "
         >
           Tambah Produk Baru
         </a>

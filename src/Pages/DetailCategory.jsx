@@ -4,7 +4,6 @@ import HeaderHome from "../Component/Home/HeaderHome";
 import MyNavbar from "../Component/Layout/MyNavbar";
 import ChildDetailCategory from "../Component/DetailCategory/ChildDetailCategory";
 import Footer from "../Component/Layout/Footer";
-import Loading from "../Component/Layout/Loading";
 
 export default function DetailCategory() {
   const KategoriID = useParams();
@@ -14,7 +13,7 @@ export default function DetailCategory() {
     <>
       <HeaderHome />
       <MyNavbar />
-      <Loading />
+
       <main>
         <ChildDetailCategory />
       </main>

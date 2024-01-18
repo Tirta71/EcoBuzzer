@@ -3,16 +3,17 @@ import LoginImage from "../../assets/han-so-hee-wallpaper-6.jpg";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { API_LOGIN } from "../../Api/ApiProfile";
+
 export default function ChildLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const API_URL = "http://localhost:8000/api/login";
 
   const handleLogin = (e) => {
     e.preventDefault();
 
     axios
-      .get(API_URL)
+      .get(API_LOGIN)
       .then((response) => {
         const data = response.data;
 

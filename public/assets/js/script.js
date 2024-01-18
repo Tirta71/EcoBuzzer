@@ -466,53 +466,55 @@ CSS TABLE OF CONTENTS
   });
   // Radio btn area end here ***
 
-  // Mouse cursor area start here ***
-  function mousecursor() {
-    const e = document.querySelector(".cursor-inner");
-    const t = document.querySelector(".cursor-outer");
+  $(document).ready(function () {
+    // Mouse cursor area start here ***
+    function mousecursor() {
+      if ($("body").length) {
+        const cursorInner = $(".cursor-inner");
+        const cursorOuter = $(".cursor-outer");
+        let isHovered = false;
 
-    if (e && t) {
-      let n,
-        i = 0,
-        o = false;
+        $(window).on("mousemove", function (event) {
+          if (!isHovered) {
+            cursorOuter.css({
+              transform: `translate(${event.clientX}px, ${event.clientY}px)`,
+            });
+          }
 
-      window.onmousemove = function (s) {
-        if (!o) {
-          t.style.transform =
-            "translate(" + s.clientX + "px, " + s.clientY + "px)";
-          e.style.transform =
-            "translate(" + s.clientX + "px, " + s.clientY + "px)";
-          n = s.clientY;
-          i = s.clientX;
-        }
-      };
+          cursorInner.css({
+            transform: `translate(${event.clientX}px, ${event.clientY}px)`,
+          });
+        });
 
-      $("body").on("mouseenter", "a, .cursor-pointer", function () {
-        e.classList.add("cursor-hover");
-        t.classList.add("cursor-hover");
-      });
+        $("body").on("mouseenter", "a, .cursor-pointer", function () {
+          cursorInner.addClass("cursor-hover");
+          cursorOuter.addClass("cursor-hover");
+          isHovered = true;
+        });
 
-      $("body").on("mouseleave", "a, .cursor-pointer", function () {
-        if (!($(this).is("a") && $(this).closest(".cursor-pointer").length)) {
-          e.classList.remove("cursor-hover");
-          t.classList.remove("cursor-hover");
-        }
-      });
+        $("body").on("mouseleave", "a, .cursor-pointer", function () {
+          if (
+            ($(this).is("a") && $(this).closest(".cursor-pointer").length) ||
+            $(this).hasClass("cursor-pointer")
+          ) {
+            cursorInner.removeClass("cursor-hover");
+            cursorOuter.removeClass("cursor-hover");
+            isHovered = false;
+          }
+        });
 
-      e.style.visibility = "visible";
-      t.style.visibility = "visible";
+        cursorInner.css("visibility", "visible");
+        cursorOuter.css("visibility", "visible");
+      }
     }
-  }
 
-  $(function () {
     mousecursor();
   });
+
   // Mouse cursor area end here ***
 
   // Nice seclect area start here ***
-  $(document).ready(function () {
-    $("select").niceSelect();
-  });
+
   // Nice seclect area end here ***
 
   // Back to top area start here ***

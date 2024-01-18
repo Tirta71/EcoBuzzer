@@ -124,11 +124,6 @@ const ListProduk = () => {
                             {formatCurrency(parseFloat(product.Harga))}
                           </span>
                         </div>
-
-                        <a className="product__cart d-block bor-top" href="#0">
-                          <i className="fa-regular fa-cart-shopping primary-color me-1"></i>
-                          <span>Add to cart</span>
-                        </a>
                       </div>
                     </div>
                   ))}

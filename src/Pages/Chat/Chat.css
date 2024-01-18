@@ -1,0 +1,57 @@
+/* Chat.css */
+
+.chat-container {
+  display: flex;
+  justify-content: space-between;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.chat-list {
+  width: 30%;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+  background-color: #ffa500; /* Warna oranye */
+}
+
+.chat-list h2 {
+  margin-bottom: 10px;
+  color: #fff; /* Warna teks putih */
+}
+
+.chat-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.chat-list li {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  color: #fff; /* Warna teks putih */
+}
+
+.chat-list li:hover {
+  background-color: #ffcc80; /* Warna oranye muda saat hover */
+}
+
+.chat-list li.active {
+  background-color: #ffcc80; /* Warna oranye muda untuk elemen yang dipilih */
+}
+
+.chat-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.message-list {
+  margin-top: 20px;
+}
+
+.message {
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #ffcc80; /* Warna oranye muda untuk pesan */
+  border-radius: 5px;
+  color: #333; /* Warna teks hitam */
+}

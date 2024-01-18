@@ -22,13 +22,8 @@ export default function HeaderDetailCategory() {
 
   return (
     <>
-      <div className="pb-20 bor-bottom shop-page-wrp d-flex justify-content-between align-items-center mb-65">
+      <div className="pb-20 bor-bottom shop-page-wrp d-flex justify-content-between align-items-center mb-3">
         <p className="fw-600">Category by {kategori.NamaKategori}</p>
-        <div className="short">
-          <select className="form-select" aria-label="Default select example">
-            <option value="0">Short by popularity</option>
-          </select>
-        </div>
       </div>
     </>
   );

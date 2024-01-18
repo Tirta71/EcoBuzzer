@@ -7,7 +7,7 @@ export default function Pagination({
   currentPage,
 }) {
   return (
-    <div className="pt-4 bor-top mt-65">
+    <div className="pt-4 bor-top mt-75">
       {Array.from(
         { length: Math.ceil(totalProducts / productsPerPage) },
         (_, i) => (

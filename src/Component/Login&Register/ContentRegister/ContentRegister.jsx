@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { TAMBAH_LOKASI } from "../../../Api/ApiKategori";
+import { API_REGISTER } from "../../../Api/ApiProfile";
 
 export default function ContentRegister() {
   const [formData, setFormData] = useState({
@@ -28,19 +30,26 @@ export default function ContentRegister() {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/register",
-        formData,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // Registrasi user
+      const responseRegister = await axios.post(API_REGISTER, formData, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
-      if (response.data.success === false && response.data.data) {
-        const errors = response.data.data;
+      // Jika registrasi berhasil, tambahkan lokasi
+      if (responseRegister.data.success) {
+        const responseLocation = await axios.post(TAMBAH_LOKASI, {
+          Kota: formData.Kota,
+          Provinsi: formData.Provinsi,
+        });
+
+        console.log("Lokasi response:", responseLocation.data);
+        // Tambahkan logika atau handle response lokasi di sini jika diperlukan
+      } else {
+        // Registrasi gagal, tampilkan pesan error
+        const errors = responseRegister.data.data;
 
         Object.keys(errors).forEach((fieldName) => {
           Swal.fire({
@@ -51,22 +60,27 @@ export default function ContentRegister() {
         });
       }
 
-      // Move the registration status and response.data success/error Swal.fire outside the else block
-      setRegistrationStatus(response.data);
+      // Set status registrasi untuk digunakan pada UI
+      setRegistrationStatus(responseRegister.data);
 
+      // Tampilkan pesan sukses atau error
       Swal.fire({
-        icon: response.data.success ? "success" : "error",
-        title: response.data.message,
+        icon: responseRegister.data.success ? "success" : "error",
+        title: responseRegister.data.message,
       }).then((result) => {
-        if (result.isConfirmed) {
+        if (result.isConfirmed && responseRegister.data.success) {
+          // Jika registrasi berhasil, arahkan ke halaman login
           window.location.href = "/login";
         }
       });
     } catch (error) {
+      // Tangani kesalahan umum
+      console.error("Error during registration:", error);
+
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Email Sudah ada atau Ada kesalahan dalam mengisi form",
+        text: "Terjadi kesalahan. Silakan coba lagi.",
       });
     }
   };
@@ -124,7 +138,7 @@ export default function ContentRegister() {
               required
               className="mt-30"
               type="text"
-              placeholder="No Telepon"
+              placeholder="Masukan No Wa"
               name="NomorTelepon"
               value={formData.NomorTelepon}
               onChange={handleInputChange}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function ContentProfileDetail() {
   const [userData, setUserData] = useState(null);
@@ -53,13 +54,13 @@ export default function ContentProfileDetail() {
           </a>
         </li>
         <div className="profile-btn text-left">
-          <a
-            href=""
+          <Link
+            to="/edit-profile"
             className="btn btn-secondary text-right"
             style={{ width: "80%" }}
           >
             Edit Profile
-          </a>
+          </Link>
         </div>
       </ul>
     </>

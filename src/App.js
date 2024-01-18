@@ -12,6 +12,10 @@ import Login from "./Pages/Login&Register/Login";
 import Register from "./Pages/Login&Register/Register";
 import ProfileDetail from "./Pages/Profile Detail/ProfileDetail";
 import TambahProduk from "./Pages/Produk/TambahProduk";
+import TambahPhotoProduk from "./Pages/Produk/PhotoProduk/TambahPhotoProduk";
+import Chat from "./Pages/Chat/Chat";
+import EditProfile from "./Pages/Profile Detail/EditProfile/EditProfile";
+import EditDetailProduk from "./Pages/Produk/Edit Produk/EditDetailProduk";
 
 function App() {
   // Check if the user is logged in
@@ -27,6 +31,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/profile-detail" element={<ProfileDetail />} />
         <Route path="/tambah-produk" element={<TambahProduk />} />
+        <Route path="/tambah-photoProduk" element={<TambahPhotoProduk />} />
+        <Route path="/edit-produk/:ProductID" element={<EditDetailProduk />} />
+        <Route path="/edit-profile/" element={<EditProfile />} />
         <Route
           path="/detail-category/detail-produk/:ProductID"
           element={isUserLoggedIn ? <DetailProduk /> : <Navigate to="/login" />}

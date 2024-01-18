@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const PRODUK_API = "http://localhost:8000/api/produk";
+const PRODUK_API = "http://localhost:8000/api/produk-by-user";
 const PHOTO_API = "http://localhost:8000/api/photo";
 
 export default function RecentPost() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [photos, setPhotos] = useState([]);
+  const UserId = localStorage.getItem("UserID");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const produkResponse = await axios.get(PRODUK_API);
+        const produkResponse = await axios.get(`${PRODUK_API}/${UserId}`);
         const produkData = produkResponse.data.data;
         setProducts(produkData);
 

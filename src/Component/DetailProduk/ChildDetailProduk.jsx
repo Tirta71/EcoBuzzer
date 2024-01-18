@@ -13,19 +13,23 @@ export default function ChildDetailProduk() {
   const [photos, setPhotos] = useState([]);
 
   useEffect(() => {
-    // Fetch product details based on ProductID
-    fetch(`${PRODUK_API}/${ProductID}`)
-      .then((response) => response.json())
-      .then((data) => setProduct(data.data))
-      .catch((error) =>
-        console.error("Error fetching product details:", error)
-      );
+    const fetchData = async () => {
+      try {
+        // Fetch product details based on ProductID
+        const productResponse = await fetch(`${PRODUK_API}/${ProductID}`);
+        const productData = await productResponse.json();
+        setProduct(productData.data);
 
-    // Fetch photos based on ProductID
-    fetch(PHOTO_API)
-      .then((response) => response.json())
-      .then((data) => setPhotos(data.data))
-      .catch((error) => console.error("Error fetching photos:", error));
+        // Fetch photos based on ProductID
+        const photosResponse = await fetch(PHOTO_API);
+        const photosData = await photosResponse.json();
+        setPhotos(photosData.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, [ProductID]);
 
   const getProductPhotoUrl = () => {
